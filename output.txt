@@ -1,0 +1,236 @@
+class: org.springframework.samples.petclinic.config.SwaggerConfig
+	method: customOpenAPI();
+	method: swaggerContact();
+	method: swaggerLicense();
+class: org.springframework.samples.petclinic.application.model.for
+	method: getId();
+	method: setId();
+	method: isNew();
+class: org.springframework.samples.petclinic.application.model.for
+	method: getName();
+	method: setName();
+	method: toString();
+class: org.springframework.samples.petclinic.application.model.Owner
+	method: getAddress();
+	method: setAddress();
+	method: getCity();
+	method: setCity();
+	method: getTelephone();
+	method: setTelephone();
+	method: setPetsInternal();
+	method: setPets();
+	method: addPet();
+	method: getPet();
+	method: getPet();
+	method: getPet();
+	method: toString();
+class: org.springframework.samples.petclinic.application.model.public
+	method: getFirstName();
+	method: setFirstName();
+	method: getLastName();
+	method: setLastName();
+class: org.springframework.samples.petclinic.application.model.Pet
+	method: getBirthDate();
+	method: setBirthDate();
+	method: getType();
+	method: setType();
+	method: getOwner();
+	method: setOwner();
+	method: setVisitsInternal();
+	method: setVisits();
+	method: addVisit();
+class: org.springframework.samples.petclinic.application.model.PetType
+class: org.springframework.samples.petclinic.application.model.Role
+	method: getUser();
+	method: setUser();
+	method: getName();
+	method: setName();
+class: org.springframework.samples.petclinic.application.model.Specialty
+class: org.springframework.samples.petclinic.application.model.User
+	method: getUsername();
+	method: setUsername();
+	method: getPassword();
+	method: setPassword();
+	method: getEnabled();
+	method: setEnabled();
+	method: setRoles();
+	method: addRole();
+class: org.springframework.samples.petclinic.application.model.Vet
+	method: setSpecialtiesInternal();
+	method: setSpecialties();
+	method: getNrOfSpecialties();
+	method: getSpecialtiesInternal();
+	method: addSpecialty();
+	method: clearSpecialties();
+class: org.springframework.samples.petclinic.application.model.Visit
+	method: getDate();
+	method: setDate();
+	method: getDescription();
+	method: setDescription();
+	method: getPet();
+	method: setPet();
+class: org.springframework.samples.petclinic.PetClinicApplication
+	method: main();
+class: org.springframework.samples.petclinic.repository.jdbc.JdbcOwnerRepositoryImpl
+	method: findById();
+	method: loadPetsAndVisits();
+	method: save();
+	method: loadOwnersPetsAndVisits();
+	method: delete();
+	method: for();
+class: org.springframework.samples.petclinic.repository.jdbc.of
+	method: getTypeId();
+	method: setTypeId();
+	method: getOwnerId();
+	method: setOwnerId();
+class: org.springframework.samples.petclinic.repository.jdbc.JdbcPetRepositoryImpl
+	method: findById();
+	method: save();
+	method: createPetParameterSource();
+	method: delete();
+	method: for();
+class: org.springframework.samples.petclinic.repository.jdbc.JdbcPetRowMapper
+	method: mapRow();
+class: org.springframework.samples.petclinic.repository.jdbc.JdbcPetTypeRepositoryImpl
+	method: findById();
+	method: save();
+	method: delete();
+	method: for();
+	method: for();
+class: org.springframework.samples.petclinic.repository.jdbc.JdbcPetVisitExtractor
+	method: mapPrimaryKey();
+	method: mapForeignKey();
+	method: addChild();
+class: org.springframework.samples.petclinic.repository.jdbc.JdbcSpecialtyRepositoryImpl
+	method: findById();
+	method: save();
+	method: delete();
+class: org.springframework.samples.petclinic.repository.jdbc.JdbcUserRepositoryImpl
+	method: save();
+	method: getByUsername();
+	method: updateUserRoles();
+	method: roles();
+class: org.springframework.samples.petclinic.repository.jdbc.JdbcVetRepositoryImpl
+	method: mapRow();
+	method: findById();
+	method: mapRow();
+	method: save();
+	method: delete();
+	method: updateVetSpecialties();
+class: org.springframework.samples.petclinic.repository.jdbc.JdbcVisitRepositoryImpl
+	method: createVisitParameterSource();
+	method: findById();
+	method: save();
+	method: delete();
+	method: mapRow();
+class: org.springframework.samples.petclinic.repository.jdbc.JdbcVisitRowMapper
+	method: mapRow();
+class: org.springframework.samples.petclinic.repository.jpa.JpaOwnerRepositoryImpl
+	method: objects();
+	method: class();
+	method: findById();
+	method: save();
+	method: delete();
+class: org.springframework.samples.petclinic.repository.jpa.JpaPetRepositoryImpl
+	method: findById();
+	method: save();
+	method: delete();
+class: org.springframework.samples.petclinic.repository.jpa.JpaPetTypeRepositoryImpl
+	method: findById();
+	method: save();
+	method: delete();
+class: org.springframework.samples.petclinic.repository.jpa.JpaSpecialtyRepositoryImpl
+	method: findById();
+	method: save();
+	method: delete();
+class: org.springframework.samples.petclinic.repository.jpa.JpaUserRepositoryImpl
+	method: save();
+class: org.springframework.samples.petclinic.repository.jpa.JpaVetRepositoryImpl
+	method: findById();
+	method: save();
+	method: delete();
+class: org.springframework.samples.petclinic.repository.jpa.JpaVisitRepositoryImpl
+	method: save();
+	method: findById();
+	method: delete();
+class: org.springframework.samples.petclinic.repository.for
+	method: findById();
+	method: save();
+	method: delete();
+class: org.springframework.samples.petclinic.repository.for
+	method: findById();
+	method: save();
+	method: delete();
+class: org.springframework.samples.petclinic.repository.springdatajpa.SpringDataPetRepositoryImpl
+	method: delete();
+class: org.springframework.samples.petclinic.repository.springdatajpa.SpringDataPetTypeRepositoryImpl
+	method: delete();
+class: org.springframework.samples.petclinic.repository.springdatajpa.SpringDataSpecialtyRepositoryImpl
+	method: delete();
+class: org.springframework.samples.petclinic.repository.springdatajpa.SpringDataVisitRepositoryImpl
+	method: delete();
+class: org.springframework.samples.petclinic.repository.for
+	method: findById();
+	method: save();
+	method: delete();
+class: org.springframework.samples.petclinic.repository.for
+	method: save();
+	method: findById();
+	method: delete();
+class: org.springframework.samples.petclinic.application.rest.advice.ExceptionControllerAdvice
+class: org.springframework.samples.petclinic.application.rest.controller.BindingErrorsResponse
+	method: addBodyIdError();
+	method: addError();
+	method: addAllErrors();
+	method: toJSON();
+	method: toString();
+	method: setObjectName();
+	method: setFieldName();
+	method: setFieldValue();
+	method: setErrorMessage();
+	method: toString();
+class: org.springframework.samples.petclinic.application.rest.controller.OwnerRestController
+class: org.springframework.samples.petclinic.application.rest.controller.PetRestController
+class: org.springframework.samples.petclinic.application.rest.controller.PetTypeRestController
+class: org.springframework.samples.petclinic.application.rest.controller.RootRestController
+	method: redirectToSwagger();
+class: org.springframework.samples.petclinic.application.rest.controller.SpecialtyRestController
+class: org.springframework.samples.petclinic.application.rest.controller.UserRestController
+class: org.springframework.samples.petclinic.application.rest.controller.VetRestController
+class: org.springframework.samples.petclinic.application.rest.controller.VisitRestController
+class: org.springframework.samples.petclinic.security.BasicAuthenticationConfig
+	method: filterChain();
+	method: configureGlobal();
+class: org.springframework.samples.petclinic.security.DisableSecurityConfig
+	method: filterChain();
+class: org.springframework.samples.petclinic.security.Roles
+class: org.springframework.samples.petclinic.service.ClinicServiceImpl
+	method: deletePet();
+	method: findVisitById();
+	method: deleteVisit();
+	method: findVetById();
+	method: saveVet();
+	method: deleteVet();
+	method: deleteOwner();
+	method: findPetTypeById();
+	method: savePetType();
+	method: deletePetType();
+	method: findSpecialtyById();
+	method: saveSpecialty();
+	method: deleteSpecialty();
+	method: findOwnerById();
+	method: findPetById();
+	method: savePet();
+	method: saveVisit();
+	method: saveOwner();
+class: org.springframework.samples.petclinic.service.UserServiceImpl
+	method: saveUser();
+class: org.springframework.samples.petclinic.util.CallMonitoringAspect
+	method: isEnabled();
+	method: setEnabled();
+	method: reset();
+	method: getCallCount();
+	method: getCallTime();
+	method: invoke();
+class: org.springframework.samples.petclinic.util.mainly
+	method: getById();
