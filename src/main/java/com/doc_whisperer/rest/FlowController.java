@@ -2,6 +2,8 @@ package com.doc_whisperer.rest;
 
 import com.doc_whisperer.enteties.RegisteredFlow;
 import com.doc_whisperer.model.RegisterFlowRequest;
+import com.doc_whisperer.model.enums.DocumentationType;
+import com.doc_whisperer.services.DocumentationService;
 import com.doc_whisperer.services.FlowService;
 import java.util.List;
 import java.util.Optional;
@@ -20,6 +22,9 @@ public class FlowController {
 
     @Autowired
     private FlowService flowService;
+
+    @Autowired
+    private DocumentationService documentationService;
 
     @PostMapping("/register")
     public ResponseEntity<RegisteredFlow> registerFlow(@RequestBody RegisterFlowRequest request) {
@@ -49,5 +54,13 @@ public class FlowController {
         List<RegisteredFlow> flows = flowService.getAllFlows();
         logger.info("Retrieved {} flows", flows.size());
         return ResponseEntity.ok(flows);
+    }
+
+    @GetMapping("/generate")
+    public ResponseEntity<String> getFlowDetails(@RequestParam Long flowID,
+                                                 @RequestParam DocumentationType docType) {
+        String bigText = documentationService.fetchDocumentation(flowID, docType);
+
+        return ResponseEntity.ok(bigText);
     }
 }

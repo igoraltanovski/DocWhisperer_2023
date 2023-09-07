@@ -1,2 +1,2 @@
-INSERT INTO registered_flow (PROJECT_ID, FLOW_NAME, CLASS_INFO_JSON) VALUES (1, 'FlowName1', '{"some": "json1"}');
-INSERT INTO registered_flow (PROJECT_ID, FLOW_NAME, CLASS_INFO_JSON) VALUES (1, 'FlowName2', '{"some": "json2"}');
+INSERT INTO registered_flow (PROJECT_ID, FLOW_NAME, CLASS_INFO_JSON) VALUES (1, 'list owners ', '[{"className":"PetRestController","methods":["getPet()"]},{"className":"ClinicService","methods":["PetType findPetTypeById(int petTypeId)","Collection<PetType> findAllPetTypes()"]}]');
+INSERT INTO registered_flow (PROJECT_ID, FLOW_NAME, CLASS_INFO_JSON) VALUES (1, 'list pets ', '[{"className":"PetRestController","methods":["getPet()"]},{"className":"ClinicService","methods":["PetType findPetTypeById(int petTypeId)","Collection<PetType> findAllPetTypes()"]}]');
