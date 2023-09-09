@@ -1,7 +1,7 @@
 package com.doc_whisperer.services;
 
 import com.doc_whisperer.repositories.RegisteredFlowRepository;
-import com.doc_whisperer.enteties.RegisteredFlow;
+import com.doc_whisperer.entities.RegisteredFlow;
 import com.doc_whisperer.model.ClassInfo;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -16,14 +16,31 @@ public class FlowService {
     @Autowired
     private RegisteredFlowRepository flowRepository;
 
-    public RegisteredFlow registerFlow(String flowName, List<ClassInfo> classInfos) {
+    public RegisteredFlow registerFlow(Long projectId, String flowName, List<ClassInfo> classInfos) {
         String json = convertToJson(classInfos);
         RegisteredFlow flow = new RegisteredFlow();
         flow.setFlowName(flowName);
         flow.setClassInfoJson(json);
+        flow.setProjectId(projectId);
         return flowRepository.save(flow);
     }
 
+    public RegisteredFlow updateFlow(Long flowId, Long projectId, String flowName, List<ClassInfo> classInfos) {
+        if(flowRepository.findById(flowId).isPresent()) {
+            String json = convertToJson(classInfos);
+            RegisteredFlow flow = new RegisteredFlow();
+            flow.setFlowName(flowName);
+            flow.setClassInfoJson(json);
+            flow.setProjectId(projectId);
+            flow.setId(flowId);
+            return flowRepository.save(flow);
+        }
+        return null;
+    }
+
+    public void deleteFlow(Long flowId){
+        flowRepository.deleteById(flowId);
+    }
     private String convertToJson(List<ClassInfo> classInfos) {
         try {
             ObjectMapper mapper = new ObjectMapper();
