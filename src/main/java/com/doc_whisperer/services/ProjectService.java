@@ -1,18 +1,22 @@
 package com.doc_whisperer.services;
 
+import com.doc_whisperer.entities.Project;
 import com.doc_whisperer.model.ClassInfo;
+import com.doc_whisperer.repositories.ProjectRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class ProjectService {
 
     // Mock data
-    private final Map<String, List<ClassInfo>> data = new HashMap<>();
+    private final List<Project> data = new ArrayList<>();
+    @Autowired
+    private ProjectRepository projectRepository;
 
     public ProjectService() {
         List<ClassInfo> classes = List.of(
@@ -65,17 +69,24 @@ public class ProjectService {
                 // ... continue with other classes
 
         );
-        data.put("pet-clinic", classes);
+        Project project = new Project(1L, "Project1", convertToJson(classes));
+        data.add(project);
     }
 
-    public List<ClassInfo> getClassesForProject(String projectName) {
-        return data.getOrDefault(projectName, new ArrayList<>());
+    public Optional<Project> getProjectById(Long projectId) {
+        return projectRepository.findById(projectId);
     }
 
-    public List<String> getProjects() {
-        List<String> projects = new ArrayList<>();
-        projects.add("pet-clinic");
-        // Add more projects here if needed.
-        return projects;
+    public List<Project> getProjects() {
+        return data;
+    }
+
+    private String convertToJson(List<ClassInfo> classInfos) {
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            return mapper.writeValueAsString(classInfos);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("Error converting to JSON", e);
+        }
     }
 }

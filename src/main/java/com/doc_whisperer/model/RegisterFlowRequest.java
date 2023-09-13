@@ -6,6 +6,9 @@ public class RegisterFlowRequest {
 
     private String projectName;
     private String flowName;
+
+    private Long projectId;
+
     private List<ClassInfo> classInfos;
 
     public String getFlowName() {
@@ -30,5 +33,13 @@ public class RegisterFlowRequest {
 
     public void setProjectName(String projectName) {
         this.projectName = projectName;
+    }
+
+    public Long getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(Long projectId) {
+        this.projectId = projectId;
     }
 }

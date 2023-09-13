@@ -1,4 +1,4 @@
-package com.doc_whisperer.enteties;
+package com.doc_whisperer.entities;
 
 import javax.persistence.*;
 
