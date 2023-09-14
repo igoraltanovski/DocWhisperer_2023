@@ -1,16 +1,32 @@
 package com.doc_whisperer.services;
 
+import com.doc_whisperer.entities.DocumentationTemplate;
 import com.doc_whisperer.model.DocumentationKey;
 import com.doc_whisperer.model.enums.DocumentationType;
+import com.doc_whisperer.repositories.DocumentationTemplateRepository;
+import com.doc_whisperer.repositories.RegisteredFlowRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.PostConstruct;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
 @Service
 public class DocumentationService {
+
+    @Autowired
+    private DocumentationTemplateRepository repository;
+
+    @Autowired
+    private RegisteredFlowRepository flowRepository;
+
+    @Autowired
+    private OpenAiIntegrationService openAiIntegrationService;
 
     // URL of the AI instance
     private final Map<DocumentationKey, String> mockData = new HashMap<>();
@@ -32,4 +48,32 @@ public class DocumentationService {
             return mockData.values().stream().findFirst().orElse("No mock data available.");
         }
 
+
+    public String generateDocumentation(Long flowId, DocumentationType type) {
+        DocumentationTemplate template = repository.findByType(type)
+                .orElseThrow(() -> new RuntimeException("Template not found for type: " + type));
+
+        String flowPath = flowRepository.findById(flowId)
+                .map(flow -> flow.getFlowName() + ".txt")
+                .orElseThrow(() -> new RuntimeException("Flow not found for ID: " + flowId));
+
+        System.out.println("flowPath "+ flowPath);
+
+        String code = readRelativeFileContent(flowPath); // Read the code from the file
+
+        System.out.println("code "+ code);
+
+        return openAiIntegrationService.completeCode(template.getTemplateSystem(), template.getTemplateUser(), code);
+    }
+
+    public String readRelativeFileContent(String flowPAth) {
+        // Relative path to the file
+        InputStream in = getClass().getClassLoader().getResourceAsStream("code/add_vet.txt");
+        try {
+            return new String(in.readAllBytes());
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
 }

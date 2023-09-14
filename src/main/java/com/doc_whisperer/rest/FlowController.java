@@ -87,4 +87,11 @@ public class FlowController {
 
         return ResponseEntity.ok(bigText);
     }
+
+    @GetMapping("/generate/live")
+    public ResponseEntity<String> generateDocumentation(@RequestParam Long flowId, @RequestParam DocumentationType type) {
+        System.out.println("generateDocumentation " + flowId + " " + type);
+        String bigText = documentationService.generateDocumentation(flowId, type);
+        return ResponseEntity.ok(bigText);
+    }
 }

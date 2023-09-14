@@ -1,0 +1,307 @@
+@RestController
+@CrossOrigin(exposedHeaders = "errors, content-type")
+@RequestMapping("api")
+public class PetRestController implements PetsApi
+
+    @Override
+    public ResponseEntity<PetDto> updatePet(Integer petId, PetDto petDto) {
+        Pet currentPet = this.clinicService.findPetById(petId);
+        if (currentPet == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        currentPet.setBirthDate(petDto.getBirthDate());
+        currentPet.setName(petDto.getName());
+        currentPet.setType(petMapper.toPetType(petDto.getType()));
+        this.clinicService.savePet(currentPet);
+        return new ResponseEntity<>(petMapper.toPetDto(currentPet), HttpStatus.NO_CONTENT);
+    }
+
+-------------------------------------------------------------------------------------------------------------------------------------	
+@Entity
+@Table(name = "pets")
+public class Pet extends NamedEntity {
+
+    @Column(name = "birth_date", columnDefinition = "DATE")
+    private LocalDate birthDate;
+
+    @ManyToOne
+    @JoinColumn(name = "type_id")
+    private PetType type;
+
+    @ManyToOne
+    @JoinColumn(name = "owner_id")
+    private Owner owner;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "pet", fetch = FetchType.EAGER)
+    private Set<Visit> visits;
+
+    public LocalDate getBirthDate() {
+        return this.birthDate;
+    }
+
+    public void setBirthDate(LocalDate birthDate) {
+        this.birthDate = birthDate;
+    }
+
+    public PetType getType() {
+        return this.type;
+    }
+
+    public void setType(PetType type) {
+        this.type = type;
+    }
+
+    public Owner getOwner() {
+        return this.owner;
+    }
+
+    public void setOwner(Owner owner) {
+        this.owner = owner;
+    }
+
+    protected Set<Visit> getVisitsInternal() {
+        if (this.visits == null) {
+            this.visits = new HashSet<>();
+        }
+        return this.visits;
+    }
+
+    protected void setVisitsInternal(Set<Visit> visits) {
+        this.visits = visits;
+    }
+
+    public List<Visit> getVisits() {
+        List<Visit> sortedVisits = new ArrayList<>(getVisitsInternal());
+        PropertyComparator.sort(sortedVisits, new MutableSortDefinition("date", false, false));
+        return Collections.unmodifiableList(sortedVisits);
+    }
+
+    public void setVisits(List<Visit> visits) {
+        this.visits = new HashSet<>(visits);
+    }
+
+    public void addVisit(Visit visit) {
+        getVisitsInternal().add(visit);
+        visit.setPet(this);
+    }
+
+}
+-------------------------------------------------------------------------------------------------------------------------------------	
+@Service
+public class ClinicServiceImpl implements ClinicService {
+
+	@Override
+	@Transactional(readOnly = true)
+	public Pet findPetById(int id) throws DataAccessException {
+		Pet pet = null;
+		try {
+			pet = petRepository.findById(id);
+		} catch (ObjectRetrievalFailureException|EmptyResultDataAccessException e) {
+		// just ignore not found exceptions for Jdbc/Jpa realization
+			return null;
+		}
+		return pet;
+	}
+---------------------------------------------------------------------------------------------------------------------------------------
+/**
+ * A pet.
+ */
+
+@Schema(name = "Pet", description = "A pet.")
+@JsonTypeName("Pet")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-09-13T15:57:54.069625800+02:00[Europe/Belgrade]")
+public class PetDto {
+
+  @JsonProperty("name")
+  private String name;
+
+  @JsonProperty("birthDate")
+  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+  private LocalDate birthDate;
+
+  @JsonProperty("type")
+  private PetTypeDto type;
+
+  @JsonProperty("id")
+  private Integer id;
+
+  @JsonProperty("ownerId")
+  private Integer ownerId;
+
+  @JsonProperty("visits")
+  @Valid
+  private List<VisitDto> visits = new ArrayList<>();
+
+  public PetDto name(String name) {
+    this.name = name;
+    return this;
+  }
+
+  /**
+   * The name of the pet.
+   * @return name
+  */
+  @NotNull @Size(max = 30) 
+  @Schema(name = "name", example = "Leo", description = "The name of the pet.", requiredMode = Schema.RequiredMode.REQUIRED)
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public PetDto birthDate(LocalDate birthDate) {
+    this.birthDate = birthDate;
+    return this;
+  }
+
+  /**
+   * The date of birth of the pet.
+   * @return birthDate
+  */
+  @NotNull @Valid 
+  @Schema(name = "birthDate", example = "Tue Sep 07 02:00:00 CEST 2010", description = "The date of birth of the pet.", requiredMode = Schema.RequiredMode.REQUIRED)
+  public LocalDate getBirthDate() {
+    return birthDate;
+  }
+
+  public void setBirthDate(LocalDate birthDate) {
+    this.birthDate = birthDate;
+  }
+
+  public PetDto type(PetTypeDto type) {
+    this.type = type;
+    return this;
+  }
+
+  /**
+   * Get type
+   * @return type
+  */
+  @NotNull @Valid 
+  @Schema(name = "type", requiredMode = Schema.RequiredMode.REQUIRED)
+  public PetTypeDto getType() {
+    return type;
+  }
+
+  public void setType(PetTypeDto type) {
+    this.type = type;
+  }
+
+  public PetDto id(Integer id) {
+    this.id = id;
+    return this;
+  }
+
+  /**
+   * The ID of the pet.
+   * minimum: 0
+   * @return id
+  */
+  @Min(0) 
+  @Schema(name = "id", accessMode = Schema.AccessMode.READ_ONLY, example = "1", description = "The ID of the pet.", requiredMode = Schema.RequiredMode.REQUIRED)
+  public Integer getId() {
+    return id;
+  }
+
+  public void setId(Integer id) {
+    this.id = id;
+  }
+
+  public PetDto ownerId(Integer ownerId) {
+    this.ownerId = ownerId;
+    return this;
+  }
+
+  /**
+   * The ID of the pet's owner.
+   * minimum: 0
+   * @return ownerId
+  */
+  @Min(0) 
+  @Schema(name = "ownerId", accessMode = Schema.AccessMode.READ_ONLY, example = "1", description = "The ID of the pet's owner.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  public Integer getOwnerId() {
+    return ownerId;
+  }
+
+  public void setOwnerId(Integer ownerId) {
+    this.ownerId = ownerId;
+  }
+
+  public PetDto visits(List<VisitDto> visits) {
+    this.visits = visits;
+    return this;
+  }
+
+  public PetDto addVisitsItem(VisitDto visitsItem) {
+    if (this.visits == null) {
+      this.visits = new ArrayList<>();
+    }
+    this.visits.add(visitsItem);
+    return this;
+  }
+
+  /**
+   * Vet visit bookings for this pet.
+   * @return visits
+  */
+  @Valid 
+  @Schema(name = "visits", accessMode = Schema.AccessMode.READ_ONLY, description = "Vet visit bookings for this pet.", requiredMode = Schema.RequiredMode.REQUIRED)
+  public List<VisitDto> getVisits() {
+    return visits;
+  }
+
+  public void setVisits(List<VisitDto> visits) {
+    this.visits = visits;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    PetDto pet = (PetDto) o;
+    return Objects.equals(this.name, pet.name) &&
+        Objects.equals(this.birthDate, pet.birthDate) &&
+        Objects.equals(this.type, pet.type) &&
+        Objects.equals(this.id, pet.id) &&
+        Objects.equals(this.ownerId, pet.ownerId) &&
+        Objects.equals(this.visits, pet.visits);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(name, birthDate, type, id, ownerId, visits);
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder();
+    sb.append("class PetDto {\n");
+    sb.append("    name: ").append(toIndentedString(name)).append("\n");
+    sb.append("    birthDate: ").append(toIndentedString(birthDate)).append("\n");
+    sb.append("    type: ").append(toIndentedString(type)).append("\n");
+    sb.append("    id: ").append(toIndentedString(id)).append("\n");
+    sb.append("    ownerId: ").append(toIndentedString(ownerId)).append("\n");
+    sb.append("    visits: ").append(toIndentedString(visits)).append("\n");
+    sb.append("}");
+    return sb.toString();
+  }
+
+  /**
+   * Convert the given object to string with each line indented by 4 spaces
+   * (except the first line).
+   */
+  private String toIndentedString(Object o) {
+    if (o == null) {
+      return "null";
+    }
+    return o.toString().replace("\n", "\n    ");
+  }
+}
+
+

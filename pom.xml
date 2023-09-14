@@ -66,9 +66,9 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>dev.langchain4j</groupId>
-            <artifactId>langchain4j</artifactId>
-            <version>0.21.0</version>
+            <groupId>io.github.hamawhitegg</groupId>
+            <artifactId>langchain-core</artifactId>
+            <version>0.1.12</version>
         </dependency>
         <dependency>
             <groupId>com.h2database</groupId>

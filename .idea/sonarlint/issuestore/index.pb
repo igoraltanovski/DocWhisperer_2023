@@ -10,8 +10,6 @@ q
 Asrc/test/java/com/doc_whisperer/utils/JavaClassExtractorTest.java,9\8\981408ad9cbfc40dccf0adf678fa2feba2e493f6
 k
 ;src/main/java/com/doc_whisperer/rest/ProjectController.java,8\3\8394cb361322e9b9b9b51ee827d3d9f066e5f8b0
-@
-DocWhisperer.iml,b\f\bffd0825f2755071db979852ccb33387c31d41e1
 l
 <src/main/java/com/doc_whisperer/services/ProjectService.java,4\0\40bbc00c51765b419ff177970c11985f2a4c1d59
 l

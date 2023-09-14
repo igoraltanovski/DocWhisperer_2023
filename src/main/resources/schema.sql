@@ -9,3 +9,9 @@ CREATE TABLE project (
     project_name VARCHAR(255),
     class_info_json CLOB
 );
+CREATE TABLE documentation_template (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    type VARCHAR(255) NOT NULL,
+    template_system VARCHAR(1000),
+    template_user VARCHAR(1000)
+);
