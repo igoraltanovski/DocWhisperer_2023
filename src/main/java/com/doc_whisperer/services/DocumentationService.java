@@ -6,6 +6,7 @@ import com.doc_whisperer.model.enums.DocumentationType;
 import com.doc_whisperer.repositories.DocumentationTemplateRepository;
 import com.doc_whisperer.repositories.RegisteredFlowRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -49,6 +50,7 @@ public class DocumentationService {
         }
 
 
+    @Cacheable(value = "documentationCache", key = "#flowId + '_' + #type")
     public String generateDocumentation(Long flowId, DocumentationType type) {
         DocumentationTemplate template = repository.findByType(type)
                 .orElseThrow(() -> new RuntimeException("Template not found for type: " + type));

@@ -17,7 +17,7 @@ public interface RegisteredFlowRepository extends JpaRepository<RegisteredFlow, 
                 "p.projectName, " +
                 "rf.classInfoJson) " +
                 "FROM RegisteredFlow rf " +
-                "JOIN Project p")
+                "JOIN Project p ON rf.projectId = p.projectId")
         List<FlowProjectResponse> fetchFlowWithProjectDetails();
 
 }
