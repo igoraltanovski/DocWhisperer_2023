@@ -55,22 +55,16 @@ public class DocumentationService {
         DocumentationTemplate template = repository.findByType(type)
                 .orElseThrow(() -> new RuntimeException("Template not found for type: " + type));
 
-        String flowPath = flowRepository.findById(flowId)
-                .map(flow -> flow.getFlowName() + ".txt")
-                .orElseThrow(() -> new RuntimeException("Flow not found for ID: " + flowId));
-
-        System.out.println("flowPath "+ flowPath);
-
-        String code = readRelativeFileContent(flowPath); // Read the code from the file
+        String code = readRelativeFileContent(flowId); // Read the code from the file
 
         System.out.println("code "+ code);
 
         return openAiIntegrationService.completeCode(template.getTemplateSystem(), template.getTemplateUser(), code);
     }
 
-    public String readRelativeFileContent(String flowPAth) {
+    public String readRelativeFileContent(Long flowPAth) {
         // Relative path to the file
-        InputStream in = getClass().getClassLoader().getResourceAsStream("code/add_vet.txt");
+        InputStream in = getClass().getClassLoader().getResourceAsStream("code/"+flowPAth.toString()+".txt");
         try {
             return new String(in.readAllBytes());
         } catch (IOException e) {

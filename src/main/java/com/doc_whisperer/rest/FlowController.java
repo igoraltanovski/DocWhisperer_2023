@@ -1,6 +1,7 @@
 package com.doc_whisperer.rest;
 
 import com.doc_whisperer.entities.RegisteredFlow;
+import com.doc_whisperer.model.DocumentationResponse;
 import com.doc_whisperer.model.FlowProjectResponse;
 import com.doc_whisperer.model.RegisterFlowRequest;
 import com.doc_whisperer.model.enums.DocumentationType;
@@ -13,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,7 +34,7 @@ public class FlowController {
     @PostMapping("/register")
     public ResponseEntity<RegisteredFlow> registerFlow(@RequestBody RegisterFlowRequest request) {
         logger.info("Attempting to register flow with name: {}", request.getFlowName());
-        RegisteredFlow flow = flowService.registerFlow(request.getProjectId(),request.getFlowName(), request.getClassInfos());
+        RegisteredFlow flow = flowService.registerFlow(request.getProjectId(), request.getFlowName(), request.getClassInfos());
         logger.info("Successfully registered flow with ID: {}", flow.getId());
         return ResponseEntity.ok(flow);
     }
@@ -40,7 +42,7 @@ public class FlowController {
     @PostMapping("/update/{id}")
     public ResponseEntity<RegisteredFlow> updateFlow(@PathVariable Long id, @RequestBody RegisterFlowRequest request) {
         logger.info("Attempting to update flow with name: {}", request.getFlowName());
-        RegisteredFlow flow = flowService.updateFlow(id,request.getProjectId(),request.getFlowName(), request.getClassInfos());
+        RegisteredFlow flow = flowService.updateFlow(id, request.getProjectId(), request.getFlowName(), request.getClassInfos());
         logger.info("Successfully update flow with ID: {}", flow.getId());
         return ResponseEntity.ok(flow);
     }
@@ -89,10 +91,12 @@ public class FlowController {
         return ResponseEntity.ok(bigText);
     }
 
-    @GetMapping("/generate/live")
-    public ResponseEntity<String> generateDocumentation(@RequestParam Long flowId, @RequestParam DocumentationType type) {
+    @GetMapping(value = "/generate/live", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<DocumentationResponse> generateDocumentation(@RequestParam Long flowId, @RequestParam DocumentationType type) {
         System.out.println("generateDocumentation " + flowId + " " + type);
         String bigText = documentationService.generateDocumentation(flowId, type);
-        return ResponseEntity.ok(bigText);
+        DocumentationResponse response = new DocumentationResponse(bigText);
+        return ResponseEntity.ok(response);
     }
+
 }

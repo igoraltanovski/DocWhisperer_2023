@@ -15,7 +15,7 @@ class OpenAiIntegrationServiceTest {
         @Test
         public void testCompleteCode() throws Exception {
             // Read the code from the file
-/*            String code = new String(Files.readAllBytes(Paths.get("C:\\pet_clinic\\DocWhisperer\\src\\main\\resources\\code\\add_vet.txt")));
+/*            String code = new String(Files.readAllBytes(Paths.get("C:\\pet_clinic\\DocWhisperer\\src\\main\\resources\\code\\1.txt")));
 
             // Call the completeCode method
             String result = service.completeCode("Channel the experience and knowledge of a senior developer and technical writer. Given the code or technical topic below, provide a detailed, comprehensive, and technically accurate explanation, walkthrough, or documentation, as if explaining to a fellow developer. Make sure to address nuances, best practices, and potential pitfalls.",
