@@ -1,5 +1,6 @@
 package com.doc_whisperer.services;
 
+import com.doc_whisperer.model.FlowProjectResponse;
 import com.doc_whisperer.repositories.RegisteredFlowRepository;
 import com.doc_whisperer.entities.RegisteredFlow;
 import com.doc_whisperer.model.ClassInfo;
@@ -54,7 +55,7 @@ public class FlowService {
         return flowRepository.findById(id);
     }
 
-    public List<RegisteredFlow> getAllFlows() {
-        return flowRepository.findAll();
+    public List<FlowProjectResponse> getAllFlows() {
+        return flowRepository.fetchFlowWithProjectDetails();
     }
 }

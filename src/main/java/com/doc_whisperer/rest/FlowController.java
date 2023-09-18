@@ -1,6 +1,7 @@
 package com.doc_whisperer.rest;
 
 import com.doc_whisperer.entities.RegisteredFlow;
+import com.doc_whisperer.model.FlowProjectResponse;
 import com.doc_whisperer.model.RegisterFlowRequest;
 import com.doc_whisperer.model.enums.DocumentationType;
 import com.doc_whisperer.services.DocumentationService;
@@ -73,9 +74,9 @@ public class FlowController {
     }
 
     @GetMapping
-    public ResponseEntity<List<RegisteredFlow>> getAllFlows() {
+    public ResponseEntity<List<FlowProjectResponse>> getAllFlows() {
         logger.info("Fetching all registered flows");
-        List<RegisteredFlow> flows = flowService.getAllFlows();
+        List<FlowProjectResponse> flows = flowService.getAllFlows();
         logger.info("Retrieved {} flows", flows.size());
         return ResponseEntity.ok(flows);
     }
