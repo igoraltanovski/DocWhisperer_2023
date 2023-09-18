@@ -17,6 +17,9 @@ public class RegisteredFlow {
     @Lob  // large object
     private String classInfoJson;  // this will store the JSON representation of list of ClassInfo
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "projectId", insertable = false, updatable = false)
+    private Project project;
 
     public Long getId() {
         return id;

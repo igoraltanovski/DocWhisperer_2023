@@ -9,15 +9,15 @@ import java.util.List;
 
 public interface RegisteredFlowRepository extends JpaRepository<RegisteredFlow, Long> {
 
-        @Query("SELECT new com.yourpackage.FlowProjectResponse(" +
+        @Query("SELECT new com.doc_whisperer.model.FlowProjectResponse(" +
                 "rf.id, " +
                 "rf.projectId, " +
                 "rf.flowName, " +
                 "rf.classInfoJson, " +
                 "p.projectName, " +
-                "p.classInfoJson) " +
+                "rf.classInfoJson) " +
                 "FROM RegisteredFlow rf " +
-                "JOIN Project p ON rf.projectId = p.projectId")
+                "JOIN Project p")
         List<FlowProjectResponse> fetchFlowWithProjectDetails();
 
 }
