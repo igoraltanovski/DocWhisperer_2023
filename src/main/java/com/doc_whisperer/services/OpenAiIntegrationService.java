@@ -10,17 +10,20 @@ import java.util.List;
 @Service
 public class OpenAiIntegrationService {
 
+    public static final  String gtp_4_model = "gpt-4";
+    public static final  String gtp_3_5_model = "gpt-3.5-turbo";
 
-    public String completeCode(String sysMessage, String template,  String code) {
-        return completeCode(sysMessage, template, code, 2000);
+
+    public String completeCode(String sysMessage, String template,  String code, String model) {
+        return completeCode(sysMessage, template, code, 2000, model);
     }
 
 
-    public String completeCode(String sysMessage, String template,  String code, Integer maxTokens) {
+    public String completeCode(String sysMessage, String template,  String code, Integer maxTokens, String model) {
 
         var chat = ChatOpenAI.builder()
                 .openaiApiKey("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")
-                .model("gpt-4")
+                .model(model)
                 .temperature(0.5f)
                 .maxTokens(maxTokens)
                 .requestTimeout(120)

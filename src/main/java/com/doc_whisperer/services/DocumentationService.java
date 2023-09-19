@@ -21,6 +21,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static com.doc_whisperer.services.OpenAiIntegrationService.gtp_3_5_model;
+import static com.doc_whisperer.services.OpenAiIntegrationService.gtp_4_model;
+
 @Service
 public class DocumentationService {
 
@@ -66,7 +69,7 @@ public class DocumentationService {
 
         System.out.println("code "+ code);
 
-        return openAiIntegrationService.completeCode(template.getTemplateSystem(), template.getTemplateUser(), code);
+        return openAiIntegrationService.completeCode(template.getTemplateSystem(), template.getTemplateUser(), code, gtp_4_model);
     }
 
     @Cacheable(value = "requirementsSummarizationCache", key = "#root.method.name")
@@ -79,7 +82,7 @@ public class DocumentationService {
         return groupedByCategory.entrySet().stream().map(entry -> {
             String category = entry.getKey();
             String prompt = createPromptForCategory(entry.getValue());
-            String summarization = openAiIntegrationService.completeCode("You are an software architect", prompt, "");
+            String summarization = openAiIntegrationService.completeCode("You are an software architect", prompt, "", gtp_3_5_model);
 
             return new SummarizedResponse(category, summarization);
         }).collect(Collectors.toList());
@@ -95,7 +98,7 @@ public class DocumentationService {
         DocumentationTemplate template = repository.findByType(DocumentationType.ARCHITECTURE)
                 .orElseThrow(() -> new RuntimeException("Template not found for type: " + DocumentationType.ARCHITECTURE));
         // Create a prompt for architectural design based on the summarizations
-         String proposedArchitecture = openAiIntegrationService.completeCode(template.getTemplateSystem(), template.getTemplateUser(), allSummarizations, 6000);
+         String proposedArchitecture = openAiIntegrationService.completeCode(template.getTemplateSystem(), template.getTemplateUser(), allSummarizations, 3000, gtp_4_model);
 
         return new ArchitectureProposalResponse(summarizedResponses, proposedArchitecture);
     }
@@ -110,7 +113,7 @@ public class DocumentationService {
         DocumentationTemplate template = repository.findByType(DocumentationType.PO)
                 .orElseThrow(() -> new RuntimeException("Template not found for type: " + DocumentationType.ARCHITECTURE));
         // Create a prompt for architectural design based on the summarizations
-        String proposedArchitecture = openAiIntegrationService.completeCode(template.getTemplateSystem(), template.getTemplateUser(), allSummarizations, 4000);
+        String proposedArchitecture = openAiIntegrationService.completeCode(template.getTemplateSystem(), template.getTemplateUser(), allSummarizations, 2000, gtp_4_model);
 
         return new ArchitectureProposalResponse(summarizedResponses, proposedArchitecture);
     }
