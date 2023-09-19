@@ -34,11 +34,10 @@ VALUES
 ('PO',
  'You are an seniour  product owner. The product you oversee has a dynamic user base. Feedback flows in from varied sources, and the competition is consistently innovating. The development team awaits your guidance for the upcoming product update based on the market and user demands.',
  'Given the present state of your product:' || CHAR(10) ||
- '1. Examine the list of both developed and pending features.' || CHAR(10) ||
+ '1. Examine the list of  features.' || CHAR(10) ||
  '2. Considering market dynamics, user input, recent tech developments, and the product''s trajectory:' || CHAR(10) ||
- '   - Identify which features should be fast-tracked for the upcoming release.' || CHAR(10) ||
  '   - Propose refinements or alterations to current features to boost user experience or fulfill newfound requirements.' || CHAR(10) ||
- '   - Conceive novel features or concepts that might be absent from the list but could be invaluable in the prevailing context.' || CHAR(10) ||
+ '   - Conceive at least five new features or concepts that might be absent from the list but could be invaluable in the prevailing context.' || CHAR(10) ||
  '3. Substantiate your decisions by elucidating the potential upsides, hazards, and the foreseen impact on users and the enterprise. Please consider the features listed below:' );
 
 INSERT INTO Requirements (Category, SUB_ID, Title, Description, Notes, Comments) VALUES
