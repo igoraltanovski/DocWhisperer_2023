@@ -15,3 +15,13 @@ CREATE TABLE documentation_template (
     template_system VARCHAR(1000),
     template_user VARCHAR(1000)
 );
+
+CREATE TABLE Requirements (
+    ID serial PRIMARY KEY,
+    Category VARCHAR(255),
+    SUB_ID  INT,
+    Title VARCHAR(255),
+    Description TEXT,
+    Notes TEXT NULL,
+    Comments TEXT NULL
+);
