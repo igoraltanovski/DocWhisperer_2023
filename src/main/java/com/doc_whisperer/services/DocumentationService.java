@@ -82,7 +82,7 @@ public class DocumentationService {
         return groupedByCategory.entrySet().stream().map(entry -> {
             String category = entry.getKey();
             String prompt = createPromptForCategory(entry.getValue());
-            String summarization = openAiIntegrationService.completeCode("You are an software architect", prompt, "", gtp_3_5_model);
+            String summarization = openAiIntegrationService.completeCode("You are a software architect", prompt, "", gtp_3_5_model);
 
             return new SummarizedResponse(category, summarization);
         }).collect(Collectors.toList());
