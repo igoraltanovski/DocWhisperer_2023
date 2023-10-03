@@ -33,8 +33,8 @@ public class RequirementController {
         return documentationService.generateArchitectureProposal(summarizedResponses);
     }
 
-    @GetMapping("/generate-business-requirements")
-    public ArchitectureProposalResponse generateBusinessRequirements() {
+    @PostMapping("/generate-business-requirements")
+    public ArchitectureProposalResponse generateBusinessRequirements(@RequestBody SecurityAuthOptions securityAuthOptions) {
         List<SummarizedResponse> summarizedResponses = documentationService.summarizeRequirementsByCategory();
         return documentationService.generateBusinessRequirements(summarizedResponses);
     }
