@@ -22,7 +22,7 @@ public class OpenAiIntegrationService {
     public String completeCode(String sysMessage, String template,  String code, Integer maxTokens, String model) {
 
         var chat = ChatOpenAI.builder()
-                .openaiApiKey("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")
+                .openaiApiKey(System.getenv("OPENAI_API_KEY"))
                 .model(model)
                 .temperature(0.5f)
                 .maxTokens(maxTokens)
