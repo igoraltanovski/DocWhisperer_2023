@@ -27,13 +27,13 @@ public class RequirementController {
     }
 
     @GetMapping("/generate-architecture")
-    public ArchitectureProposalResponse generateArchitectureProposal() {
+    public ArchitectureProposalResponse generateArchitectureProposal(@RequestBody SecurityAuthOptions securityAuthOptions) {
         List<SummarizedResponse> summarizedResponses = documentationService.summarizeRequirementsByCategory();
         return documentationService.generateArchitectureProposal(summarizedResponses);
     }
 
     @PostMapping("/generate-business-requirements")
-    public ArchitectureProposalResponse generateBusinessRequirements(@RequestBody SecurityAuthOptions securityAuthOptions) {
+    public ArchitectureProposalResponse generateBusinessRequirements() {
         List<SummarizedResponse> summarizedResponses = documentationService.summarizeRequirementsByCategory();
         return documentationService.generateBusinessRequirements(summarizedResponses);
     }
