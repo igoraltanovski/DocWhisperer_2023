@@ -26,7 +26,7 @@ public class RequirementController {
         return requirementService.getAllRequirements();
     }
 
-    @GetMapping("/generate-architecture")
+    @PostMapping("/generate-architecture")
     public ArchitectureProposalResponse generateArchitectureProposal(@RequestBody ArchitecturePayload architecturePayload) {
         List<SummarizedResponse> summarizedResponses = documentationService.summarizeRequirementsByCategory();
         return documentationService.generateArchitectureProposal(architecturePayload, summarizedResponses);
