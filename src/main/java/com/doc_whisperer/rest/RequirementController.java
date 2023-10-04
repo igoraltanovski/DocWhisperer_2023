@@ -38,4 +38,9 @@ public class RequirementController {
         return documentationService.generateBusinessRequirements(summarizedResponses);
     }
 
+    @GetMapping("/get-requirements")
+    public List<Requirement> getRequirements() {
+        return documentationService.getRequirements();
+    }
+
 }
