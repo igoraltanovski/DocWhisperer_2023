@@ -21,7 +21,7 @@ public class RequirementController {
     @Autowired
     private DocumentationService documentationService;
 
-    @GetMapping
+    @GetMapping("/requirements")
     public List<Requirement> getAllRequirements() {
         return requirementService.getAllRequirements();
     }
@@ -36,11 +36,6 @@ public class RequirementController {
     public ArchitectureProposalResponse generateBusinessRequirements() {
         List<SummarizedResponse> summarizedResponses = documentationService.summarizeRequirementsByCategory();
         return documentationService.generateBusinessRequirements(summarizedResponses);
-    }
-
-    @GetMapping("/get-requirements")
-    public List<Requirement> getRequirements() {
-        return requirementService.getAllRequirements();
     }
 
 }
