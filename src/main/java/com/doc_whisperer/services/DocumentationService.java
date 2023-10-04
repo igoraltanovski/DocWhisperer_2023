@@ -1,9 +1,10 @@
 package com.doc_whisperer.services;
 
 import com.doc_whisperer.entities.DocumentationTemplate;
+import com.doc_whisperer.entities.Requirement;
+import com.doc_whisperer.model.ArchitecturePayload;
 import com.doc_whisperer.model.ArchitectureProposalResponse;
 import com.doc_whisperer.model.DocumentationKey;
-import com.doc_whisperer.entities.Requirement;
 import com.doc_whisperer.model.SummarizedResponse;
 import com.doc_whisperer.model.enums.DocumentationType;
 import com.doc_whisperer.repositories.DocumentationTemplateRepository;
@@ -50,24 +51,23 @@ public class DocumentationService {
     }
 
     public String fetchDocumentation(Long flowName, DocumentationType docType) {
-         // If the specific combination is found, return that
-            if (mockData.containsKey(new DocumentationKey(flowName, docType))) {
-                return mockData.get(new DocumentationKey(flowName, docType));
-            }
-
-            // Otherwise, return the first value in the map (if it exists)
-            return mockData.values().stream().findFirst().orElse("No mock data available.");
+        // If the specific combination is found, return that
+        if (mockData.containsKey(new DocumentationKey(flowName, docType))) {
+            return mockData.get(new DocumentationKey(flowName, docType));
         }
+
+        // Otherwise, return the first value in the map (if it exists)
+        return mockData.values().stream().findFirst().orElse("No mock data available.");
+    }
 
 
     @Cacheable(value = "documentationCache", key = "#flowId + '_' + #type")
     public String generateDocumentation(Long flowId, DocumentationType type) {
-        DocumentationTemplate template = repository.findByType(type)
-                .orElseThrow(() -> new RuntimeException("Template not found for type: " + type));
+        DocumentationTemplate template = repository.findByType(type).orElseThrow(() -> new RuntimeException("Template not found for type: " + type));
 
         String code = readRelativeFileContent(flowId); // Read the code from the file
 
-        System.out.println("code "+ code);
+        System.out.println("code " + code);
 
         return openAiIntegrationService.completeCode(template.getTemplateSystem(), template.getTemplateUser(), code, gtp_4_model);
     }
@@ -76,8 +76,7 @@ public class DocumentationService {
     public List<SummarizedResponse> summarizeRequirementsByCategory() {
         List<Requirement> requirements = requirementRepository.findAll();
 
-        Map<String, List<Requirement>> groupedByCategory = requirements.stream()
-                .collect(Collectors.groupingBy(Requirement::getCategory));
+        Map<String, List<Requirement>> groupedByCategory = requirements.stream().collect(Collectors.groupingBy(Requirement::getCategory));
 
         return groupedByCategory.entrySet().stream().map(entry -> {
             String category = entry.getKey();
@@ -89,29 +88,52 @@ public class DocumentationService {
     }
 
     @Cacheable(value = "generateArchitectureProposal", key = "#root.method.name")
-    public ArchitectureProposalResponse generateArchitectureProposal(List<SummarizedResponse> summarizedResponses) {
-        // Concatenate all summarizations into a single string
-        String allSummarizations = summarizedResponses.stream()
-                .map(SummarizedResponse::getSummarization)
-                .collect(Collectors.joining(", "));
+    public ArchitectureProposalResponse generateArchitectureProposal(ArchitecturePayload architecturePayload, List<SummarizedResponse> summarizedResponses) {
+        // Validate inputs
+        if (architecturePayload == null || summarizedResponses == null) {
+            throw new IllegalArgumentException("Architecture payload and summarized responses cannot be null");
+        }
 
-        DocumentationTemplate template = repository.findByType(DocumentationType.ARCHITECTURE)
-                .orElseThrow(() -> new RuntimeException("Template not found for type: " + DocumentationType.ARCHITECTURE));
+        // Concatenate all summarizations into a single string
+        String allSummarizations = summarizedResponses.stream().map(SummarizedResponse::getSummarization).collect(Collectors.joining(", "));
+
+        DocumentationTemplate template = repository.findByType(DocumentationType.ARCHITECTURE).orElseThrow(() -> new TemplateNotFoundException("Template not found for type: " + DocumentationType.ARCHITECTURE));
+
+        StringBuilder finalTemplate = new StringBuilder(template.getTemplateSystem() + ". Use the following parameters as ");
+
+        if (architecturePayload.getDataArchitecture() != null) {
+            finalTemplate.append(architecturePayload.getDataArchitecture().getDescription()).append(" ");
+        }
+        if (architecturePayload.getArchitecturalPatterns() != null) {
+            finalTemplate.append(architecturePayload.getArchitecturalPatterns().getDescription()).append(" ");
+        }
+        if (architecturePayload.getOAuthOptions() != null) {
+            finalTemplate.append(architecturePayload.getOAuthOptions().getDescription()).append(" ");
+        }
+        if (architecturePayload.getDeploymentStrategy() != null) {
+            finalTemplate.append(architecturePayload.getDeploymentStrategy().getDescription()).append(" ");
+        }
+
         // Create a prompt for architectural design based on the summarizations
-         String proposedArchitecture = openAiIntegrationService.completeCode(template.getTemplateSystem(), template.getTemplateUser(), allSummarizations, 3000, gtp_4_model);
+        String proposedArchitecture = openAiIntegrationService.completeCode(template.getTemplateSystem(), template.getTemplateUser(), allSummarizations, 3000, gtp_4_model);
 
         return new ArchitectureProposalResponse(summarizedResponses, proposedArchitecture);
     }
 
+    // Custom exception class
+    public class TemplateNotFoundException extends RuntimeException {
+        public TemplateNotFoundException(String message) {
+            super(message);
+        }
+    }
+
+
     @Cacheable(value = "generateArchitectureProposal", key = "#root.method.name")
     public ArchitectureProposalResponse generateBusinessRequirements(List<SummarizedResponse> summarizedResponses) {
         // Concatenate all summarizations into a single string
-        String allSummarizations = summarizedResponses.stream()
-                .map(SummarizedResponse::getSummarization)
-                .collect(Collectors.joining(", "));
+        String allSummarizations = summarizedResponses.stream().map(SummarizedResponse::getSummarization).collect(Collectors.joining(", "));
 
-        DocumentationTemplate template = repository.findByType(DocumentationType.PO)
-                .orElseThrow(() -> new RuntimeException("Template not found for type: " + DocumentationType.ARCHITECTURE));
+        DocumentationTemplate template = repository.findByType(DocumentationType.PO).orElseThrow(() -> new RuntimeException("Template not found for type: " + DocumentationType.ARCHITECTURE));
         // Create a prompt for architectural design based on the summarizations
         String proposedArchitecture = openAiIntegrationService.completeCode(template.getTemplateSystem(), template.getTemplateUser(), allSummarizations, 2000, gtp_4_model);
 
@@ -130,7 +152,7 @@ public class DocumentationService {
 
     public String readRelativeFileContent(Long flowPAth) {
         // Relative path to the file
-        InputStream in = getClass().getClassLoader().getResourceAsStream("code/"+flowPAth.toString()+".txt");
+        InputStream in = getClass().getClassLoader().getResourceAsStream("code/" + flowPAth.toString() + ".txt");
         try {
             return new String(in.readAllBytes());
         } catch (IOException e) {

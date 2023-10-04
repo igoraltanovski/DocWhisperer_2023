@@ -2,7 +2,7 @@ package com.doc_whisperer.rest;
 
 import com.doc_whisperer.model.ArchitectureProposalResponse;
 import com.doc_whisperer.entities.Requirement;
-import com.doc_whisperer.model.SecurityAuthOptions;
+import com.doc_whisperer.model.ArchitecturePayload;
 import com.doc_whisperer.model.SummarizedResponse;
 import com.doc_whisperer.services.DocumentationService;
 import com.doc_whisperer.services.RequirementService;
@@ -27,9 +27,9 @@ public class RequirementController {
     }
 
     @GetMapping("/generate-architecture")
-    public ArchitectureProposalResponse generateArchitectureProposal(@RequestBody SecurityAuthOptions securityAuthOptions) {
+    public ArchitectureProposalResponse generateArchitectureProposal(@RequestBody ArchitecturePayload architecturePayload) {
         List<SummarizedResponse> summarizedResponses = documentationService.summarizeRequirementsByCategory();
-        return documentationService.generateArchitectureProposal(summarizedResponses);
+        return documentationService.generateArchitectureProposal(architecturePayload, summarizedResponses);
     }
 
     @PostMapping("/generate-business-requirements")
