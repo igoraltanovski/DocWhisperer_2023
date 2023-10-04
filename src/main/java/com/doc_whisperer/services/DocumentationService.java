@@ -107,11 +107,14 @@ public class DocumentationService {
         if (architecturePayload.getArchitecturalPatterns() != null) {
             finalTemplate.append(architecturePayload.getArchitecturalPatterns().getDescription()).append(" ");
         }
-        if (architecturePayload.getOAuthOptions() != null) {
-            finalTemplate.append(architecturePayload.getOAuthOptions().getDescription()).append(" ");
+        if (architecturePayload.getUserExperienceAndFrontEnd() != null) {
+            finalTemplate.append(architecturePayload.getUserExperienceAndFrontEnd().getDescription()).append(" ");
         }
         if (architecturePayload.getDeploymentStrategy() != null) {
             finalTemplate.append(architecturePayload.getDeploymentStrategy().getDescription()).append(" ");
+        }
+        if (architecturePayload.getSecurityAndAuthentication() != null) {
+            finalTemplate.append(architecturePayload.getSecurityAndAuthentication().getDescription()).append(" ");
         }
 
         // Create a prompt for architectural design based on the summarizations

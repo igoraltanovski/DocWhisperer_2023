@@ -6,9 +6,10 @@ import lombok.Data;
 @Data
 public class ArchitecturePayload {
 
-    private OAuthOptions oAuthOptions;
     private ArchitecturalPatterns architecturalPatterns;
     private DataArchitecture dataArchitecture;
     private DeploymentStrategy deploymentStrategy;
+    private UserExperienceAndFrontEnd userExperienceAndFrontEnd;
+    private SecurityAndAuthentication securityAndAuthentication;
 
 }
