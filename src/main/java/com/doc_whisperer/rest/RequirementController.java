@@ -40,7 +40,7 @@ public class RequirementController {
 
     @GetMapping("/get-requirements")
     public List<Requirement> getRequirements() {
-        return documentationService.getRequirements();
+        return requirementService.getAllRequirements();
     }
 
 }
