@@ -116,7 +116,9 @@ public class DocumentationService {
         if (architecturePayload.getSecurityAndAuthentication() != null) {
             finalTemplate.append(architecturePayload.getSecurityAndAuthentication().getDescription()).append(" ");
         }
-
+        if (architecturePayload.getTechnologyStack() != null) {
+            finalTemplate.append(architecturePayload.getTechnologyStack().getDescription()).append(" ");
+        }
         // Create a prompt for architectural design based on the summarizations
         String proposedArchitecture = openAiIntegrationService.completeCode(template.getTemplateSystem(), template.getTemplateUser(), allSummarizations, 3000, gtp_4_model);
 
