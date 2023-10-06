@@ -20,6 +20,8 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static com.doc_whisperer.services.OpenAiIntegrationService.gtp_3_5_model;
@@ -99,28 +101,32 @@ public class DocumentationService {
 
         DocumentationTemplate template = repository.findByType(DocumentationType.ARCHITECTURE).orElseThrow(() -> new TemplateNotFoundException("Template not found for type: " + DocumentationType.ARCHITECTURE));
 
-        StringBuilder finalTemplate = new StringBuilder(template.getTemplateSystem() + ". Use the following parameters as ");
+        StringBuilder finalTemplate = new StringBuilder(template.getTemplateSystem() + ". Use the following parameters ");
 
         if (architecturePayload.getDataArchitecture() != null) {
-            finalTemplate.append(architecturePayload.getDataArchitecture().getDescription()).append(" ");
+            finalTemplate.append(" For Database Architecture use ").append(architecturePayload.getDataArchitecture().getDescription()).append(" ");
         }
         if (architecturePayload.getArchitecturalPatterns() != null) {
-            finalTemplate.append(architecturePayload.getArchitecturalPatterns().getDescription()).append(" ");
+            finalTemplate.append(" For Software Architecture use ").append(architecturePayload.getArchitecturalPatterns().getDescription()).append(" ");
         }
         if (architecturePayload.getUserExperienceAndFrontEnd() != null) {
-            finalTemplate.append(architecturePayload.getUserExperienceAndFrontEnd().getDescription()).append(" ");
+            finalTemplate.append(" For front end architecture/services use ").append(architecturePayload.getUserExperienceAndFrontEnd().getDescription()).append(" ");
         }
         if (architecturePayload.getDeploymentStrategy() != null) {
-            finalTemplate.append(architecturePayload.getDeploymentStrategy().getDescription()).append(" ");
+            finalTemplate.append(" For deployment use ").append(architecturePayload.getDeploymentStrategy().getDescription()).append(" ");
         }
         if (architecturePayload.getSecurityAndAuthentication() != null) {
-            finalTemplate.append(architecturePayload.getSecurityAndAuthentication().getDescription()).append(" ");
+            finalTemplate.append(" As for security use ").append(architecturePayload.getSecurityAndAuthentication().getDescription()).append(" ");
         }
         if (architecturePayload.getTechnologyStack() != null) {
-            finalTemplate.append(architecturePayload.getTechnologyStack().getDescription()).append(" ");
+            finalTemplate.append(" Consider this technologies to use in the design of the architecture ").append(architecturePayload.getTechnologyStack().getDescription()).append(" ");
         }
+
+        int maxTokens = 9000 - countWordsAndSymbols(finalTemplate);
+        System.out.println("Max token for response allowed "+ maxTokens);
+
         // Create a prompt for architectural design based on the summarizations
-        String proposedArchitecture = openAiIntegrationService.completeCode(template.getTemplateSystem(), template.getTemplateUser(), allSummarizations, 3000, gtp_4_model);
+        String proposedArchitecture = openAiIntegrationService.completeCode(template.getTemplateSystem(), template.getTemplateUser(), allSummarizations, maxTokens, gtp_4_model);
 
         return new ArchitectureProposalResponse(summarizedResponses, proposedArchitecture);
     }
@@ -164,6 +170,33 @@ public class DocumentationService {
             e.printStackTrace();
             throw new RuntimeException(e);
         }
+    }
+
+    public static int countWordsAndSymbols(StringBuilder text) {
+        // Convert StringBuilder to String
+        String str = text.toString();
+
+        // Regex pattern to match words
+        String wordPattern = "\\w+";
+        Pattern pattern = Pattern.compile(wordPattern);
+        Matcher matcher = pattern.matcher(str);
+
+        int wordCount = 0;
+        while (matcher.find()) {
+            wordCount++;
+        }
+
+        // Regex pattern to match symbols
+        String symbolPattern = "\\W";
+        pattern = Pattern.compile(symbolPattern);
+        matcher = pattern.matcher(str);
+
+        int symbolCount = 0;
+        while (matcher.find()) {
+            symbolCount++;
+        }
+
+        return wordCount + symbolCount;
     }
 
 }
