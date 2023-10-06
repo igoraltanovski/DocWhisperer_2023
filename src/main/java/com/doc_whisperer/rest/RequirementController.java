@@ -21,7 +21,7 @@ public class RequirementController {
     @Autowired
     private DocumentationService documentationService;
 
-    @GetMapping
+    @GetMapping("/requirements")
     public List<Requirement> getAllRequirements() {
         return requirementService.getAllRequirements();
     }

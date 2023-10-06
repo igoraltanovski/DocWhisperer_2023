@@ -13,5 +13,6 @@ public class ArchitecturePayload {
     private DeploymentStrategy deploymentStrategy;
     private UserExperienceAndFrontEnd userExperienceAndFrontEnd;
     private SecurityAndAuthentication securityAndAuthentication;
+    private TechnologyStack technologyStack;
 
 }
