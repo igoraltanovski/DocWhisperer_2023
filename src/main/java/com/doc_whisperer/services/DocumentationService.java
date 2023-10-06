@@ -87,7 +87,7 @@ public class DocumentationService {
         }).collect(Collectors.toList());
     }
 
-    @Cacheable(value = "generateArchitectureProposal", key = "#root.method.name")
+    @Cacheable(value = "generateArchitectureProposal", key = "#architecturePayload.toString() + #summarizedResponses.toString()")
     public ArchitectureProposalResponse generateArchitectureProposal(ArchitecturePayload architecturePayload, List<SummarizedResponse> summarizedResponses) {
         // Validate inputs
         if (architecturePayload == null || summarizedResponses == null) {
