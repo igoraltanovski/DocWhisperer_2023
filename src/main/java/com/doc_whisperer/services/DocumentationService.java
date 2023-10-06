@@ -122,8 +122,11 @@ public class DocumentationService {
             finalTemplate.append(" Consider this technologies to use in the design of the architecture ").append(architecturePayload.getTechnologyStack().getDescription()).append(" ");
         }
 
-        int maxTokens = 9000 - countWordsAndSymbols(finalTemplate);
+        System.out.println("----------------------------------------------------------------------------------------------------------------------------");
+        System.out.println("------------------------------------------STARTING AI ARCHITECTURE CALCULATION----------------------------------------------");
+        int maxTokens = 9000 - countWordsAndSymbols(finalTemplate.toString() +" "+ allSummarizations);
         System.out.println("Max token for response allowed "+ maxTokens);
+        System.out.println("----------------------------------------------------------------------------------------------------------------------------");
 
         // Create a prompt for architectural design based on the summarizations
         String proposedArchitecture = openAiIntegrationService.completeCode(template.getTemplateSystem(), template.getTemplateUser(), allSummarizations, maxTokens, gtp_4_model);
@@ -172,10 +175,7 @@ public class DocumentationService {
         }
     }
 
-    public static int countWordsAndSymbols(StringBuilder text) {
-        // Convert StringBuilder to String
-        String str = text.toString();
-
+    public static int countWordsAndSymbols(String str) {
         // Regex pattern to match words
         String wordPattern = "\\w+";
         Pattern pattern = Pattern.compile(wordPattern);
