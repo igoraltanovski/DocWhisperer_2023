@@ -24,8 +24,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import static com.doc_whisperer.services.OpenAiIntegrationService.gtp_3_5_model;
-import static com.doc_whisperer.services.OpenAiIntegrationService.gtp_4_model;
+import static com.doc_whisperer.services.OpenAiIntegrationService.*;
 
 @Service
 public class DocumentationService {
@@ -124,12 +123,14 @@ public class DocumentationService {
 
         System.out.println("----------------------------------------------------------------------------------------------------------------------------");
         System.out.println("------------------------------------------STARTING AI ARCHITECTURE CALCULATION----------------------------------------------");
-        int maxTokens = 9000 - countWordsAndSymbols(finalTemplate.toString() +" "+ allSummarizations);
+        int maxTokens = 14000 - countWordsAndSymbols(finalTemplate.toString() +" "+ allSummarizations);
         System.out.println("Max token for response allowed "+ maxTokens);
+        System.out.println("----------------------------------------------------------------------------------------------------------------------------");
+        System.out.println("Architectural type taken in consideration is " + finalTemplate);
         System.out.println("----------------------------------------------------------------------------------------------------------------------------");
 
         // Create a prompt for architectural design based on the summarizations
-        String proposedArchitecture = openAiIntegrationService.completeCode(template.getTemplateSystem(), template.getTemplateUser(), allSummarizations, maxTokens, gtp_4_model);
+        String proposedArchitecture = openAiIntegrationService.completeCode(template.getTemplateSystem(), template.getTemplateUser(), allSummarizations, maxTokens, gtp_3_5_model_16k);
 
         return new ArchitectureProposalResponse(summarizedResponses, proposedArchitecture);
     }
