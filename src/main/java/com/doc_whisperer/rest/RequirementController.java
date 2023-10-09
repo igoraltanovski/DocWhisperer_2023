@@ -13,6 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/requirements")
+@CrossOrigin(origins = "http://localhost:4200")
 public class RequirementController {
 
     @Autowired
@@ -21,7 +22,7 @@ public class RequirementController {
     @Autowired
     private DocumentationService documentationService;
 
-    @GetMapping("/requirements")
+    @GetMapping("/all")
     public List<Requirement> getAllRequirements() {
         return requirementService.getAllRequirements();
     }
