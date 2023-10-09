@@ -12,6 +12,8 @@ public class OpenAiIntegrationService {
 
     public static final  String gtp_4_model = "gpt-4";
     public static final  String gtp_3_5_model = "gpt-3.5-turbo";
+    public static final  String gtp_3_5_model_16k = "gpt-3.5-turbo-16k";
+
 
 
     public String completeCode(String sysMessage, String template,  String code, String model) {
