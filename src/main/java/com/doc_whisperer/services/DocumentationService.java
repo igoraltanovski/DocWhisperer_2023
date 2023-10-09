@@ -70,7 +70,7 @@ public class DocumentationService {
 
         System.out.println("code " + code);
 
-        return openAiIntegrationService.completeCode(template.getTemplateSystem(), template.getTemplateUser(), code, gtp_4_model);
+        return openAiIntegrationService.completeCode(template.getTemplateSystem(), template.getTemplateUser(), code, 6000, gtp_4_model);
     }
 
     @Cacheable(value = "requirementsSummarizationCache", key = "#root.method.name")
@@ -123,7 +123,7 @@ public class DocumentationService {
 
         System.out.println("----------------------------------------------------------------------------------------------------------------------------");
         System.out.println("------------------------------------------STARTING AI ARCHITECTURE CALCULATION----------------------------------------------");
-        int maxTokens = 14000 - countWordsAndSymbols(finalTemplate.toString() +" "+ allSummarizations);
+        int maxTokens = 15500 - countWordsAndSymbols(finalTemplate.toString() +" "+ allSummarizations);
         System.out.println("Max token for response allowed "+ maxTokens);
         System.out.println("----------------------------------------------------------------------------------------------------------------------------");
         System.out.println("Architectural type taken in consideration is " + finalTemplate);
